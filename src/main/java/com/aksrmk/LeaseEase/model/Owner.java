@@ -12,7 +12,7 @@ import java.util.UUID;
 @Table
 public class Owner implements User {
     @Id
-    private final String id;
+    private final String ownerId;
     private String username;
     private String password;
     private final String email;
@@ -26,13 +26,13 @@ public class Owner implements User {
     private String updatedAt;
 
     public Owner() {
-        this.id = UUID.randomUUID().toString();
+        this.ownerId = UUID.randomUUID().toString();
         this.email = "leaseease@gmail.com";
         this.createdAt = LocalDateTime.now().toString();
     }
     // Private constructor to enforce the use of the builder
     private Owner(OwnerBuilder builder) {
-        this.id = UUID.randomUUID().toString();
+        this.ownerId = UUID.randomUUID().toString();
         this.username = builder.username;
         this.password = builder.password;
         this.email = builder.email;
@@ -42,7 +42,11 @@ public class Owner implements User {
         this.address = builder.address;
         this.nationality = builder.nationality;
         this.gender = builder.gender;
-        this.createdAt = LocalDateTime.now().toString(); // Assigning current time
+        this.updatedAt = this.createdAt = LocalDateTime.now().toString(); // Assigning current time
+    }
+
+    public String getId() {
+        return this.ownerId;
     }
 
     @Override

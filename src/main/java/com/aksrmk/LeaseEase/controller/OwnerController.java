@@ -1,11 +1,11 @@
 package com.aksrmk.LeaseEase.controller;
 
+import com.aksrmk.LeaseEase.dto.OwnerUpdateRequest;
 import com.aksrmk.LeaseEase.model.Owner;
 import com.aksrmk.LeaseEase.service.OwnerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +21,24 @@ public class OwnerController {
     }
 
     @GetMapping
-    public List<Owner> hello(){
+    public List<Owner> getOwners() {
         return ownerService.getOwners();
+    }
+
+    @PostMapping
+    public void registerOwners(@RequestBody Owner owner) {
+        ownerService.addOwner(owner);
+    }
+
+    @DeleteMapping(path = "{ownerId}")
+    public void deleteOwner(@PathVariable("ownerId") String ownerId) {
+        ownerService.deleteOwner(ownerId);
+    }
+
+    @PutMapping(path = "{ownerId}")
+    public void updateOwner(@PathVariable("ownerId") String ownerId,
+                            @Valid @RequestBody OwnerUpdateRequest updateRequest) {
+
+        ownerService.updateOwner(ownerId, updateRequest);
     }
 }
