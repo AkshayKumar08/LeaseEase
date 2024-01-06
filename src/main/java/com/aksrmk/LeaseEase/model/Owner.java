@@ -6,13 +6,22 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name="owner")
 public class Owner implements User {
+
+    public Owner() {
+        this.ownerId = UUID.randomUUID().toString();
+        this.email = "default-email"; // Provide a default value or initialize as needed
+        this.createdAt = LocalDateTime.now().toString();
+    }
+
     @Id
-    private final String ownerId;
+    @Column(name = "owner_id", nullable = false)
+    private String ownerId;
     private String username;
     private String password;
     private final String email;
@@ -25,11 +34,9 @@ public class Owner implements User {
     private final String createdAt;
     private String updatedAt;
 
-    public Owner() {
-        this.ownerId = UUID.randomUUID().toString();
-        this.email = "leaseease@gmail.com";
-        this.createdAt = LocalDateTime.now().toString();
-    }
+    @OneToMany
+    private List<Apartment> apartmentList;
+
     // Private constructor to enforce the use of the builder
     private Owner(OwnerBuilder builder) {
         this.ownerId = UUID.randomUUID().toString();
@@ -43,10 +50,6 @@ public class Owner implements User {
         this.nationality = builder.nationality;
         this.gender = builder.gender;
         this.updatedAt = this.createdAt = LocalDateTime.now().toString(); // Assigning current time
-    }
-
-    public String getId() {
-        return this.ownerId;
     }
 
     @Override
@@ -150,17 +153,34 @@ public class Owner implements User {
         this.updatedAt = updatedAt;
     }
 
+    public List<Apartment> getApartmentList() {
+        return apartmentList;
+    }
+
+    public void setApartmentList(List<Apartment> apartmentList) {
+        this.apartmentList = apartmentList;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
     // OwnerBuilder class implementing the UserBuilder interface
     public static class OwnerBuilder implements UserBuilder {
         private String username;
         private String password;
         private final String email;
         private String fullName;
-        private LocalDate dateOfBirth;
+        private final LocalDate dateOfBirth;
         private String phoneNumber;
         private String address;
         private String nationality;
         private String gender;
+        private List<Apartment> apartmentList;
 
         // Required fields in the constructor
         public OwnerBuilder(String username, String password, String email, LocalDate dateOfBirth) {
@@ -191,6 +211,16 @@ public class Owner implements User {
             return this;
         }
 
+        public OwnerBuilder gender(String gender) {
+            this.gender = gender;
+            return this;
+        }
+
+        public OwnerBuilder apartmentList(List<Apartment> apartmentList) {
+            this.apartmentList = apartmentList;
+            return this;
+        }
+
         @Override
         public String toString() {
             return "OwnerBuilder{" +
@@ -203,13 +233,10 @@ public class Owner implements User {
                     ", address='" + address + '\'' +
                     ", nationality='" + nationality + '\'' +
                     ", gender='" + gender + '\'' +
+                    ", apartment list='" + apartmentList + '\'' +
                     '}';
         }
 
-        public OwnerBuilder gender(String gender) {
-            this.gender = gender;
-            return this;
-        }
 
         // Build method to create an instance of Owner
         public Owner build() {

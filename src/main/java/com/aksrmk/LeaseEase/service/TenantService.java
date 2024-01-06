@@ -87,6 +87,9 @@ public class TenantService {
         if(updateRequest.getVehicleDetails() != null) {
             existingTenant.setVehicleDetails(updateRequest.getVehicleDetails());
         }
+        if(updateRequest.getApartment() != null) {
+            existingTenant.setApartment(updateRequest.getApartment());
+        }
         existingTenant.setUpdatedAt(LocalDateTime.now().toString());
     }
 }

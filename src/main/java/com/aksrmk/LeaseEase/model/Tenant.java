@@ -2,18 +2,17 @@ package com.aksrmk.LeaseEase.model;
 
 import com.aksrmk.LeaseEase.interfaces.User;
 import com.aksrmk.LeaseEase.interfaces.UserBuilder;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Table
+@Table(name="tenant")
 @Entity
 public class Tenant implements User {
     @Id
+    @Column(name = "tenant_id", nullable = false)
     private final String tenantId;
     private String username;
     private String password;
@@ -30,6 +29,9 @@ public class Tenant implements User {
     private LocalDate leaseEndDate;
     private String petDetails;
     private String vehicleDetails;
+    @ManyToOne
+    @JoinColumn(name = "apartment_id")
+    private Apartment apartment;
 
 
     public Tenant() {
@@ -51,6 +53,7 @@ public class Tenant implements User {
         this.gender = builder.gender;
         this.updatedAt = this.createdAt = LocalDateTime.now().toString(); // Assigning current time
         this.leaseEndDate = builder.leaseStartDate;
+        this.apartment = builder.apartment;
     }
 
     public String getId() {
@@ -190,6 +193,14 @@ public class Tenant implements User {
         this.vehicleDetails = vehicleDetails;
     }
 
+    public Apartment getApartment() {
+        return this.apartment;
+    }
+
+    public void setApartment(Apartment apartment) {
+        this.apartment = apartment;
+    }
+
     // TenantBuilder class implementing the UserBuilder interface
     public static class TenantBuilder implements UserBuilder {
         private String username;
@@ -205,6 +216,7 @@ public class Tenant implements User {
         private LocalDate leaseEndDate;
         private String petDetails;
         private String vehicleDetails;
+        private Apartment apartment;
 
 
         // Required fields in the constructor
@@ -256,6 +268,11 @@ public class Tenant implements User {
             return this;
         }
 
+        public Tenant.TenantBuilder apartmentDetails(Apartment apartment) {
+            this.apartment = apartment;
+            return this;
+        }
+
         @Override
         public String toString() {
             return "TenantBuilder{" +
@@ -272,6 +289,7 @@ public class Tenant implements User {
                     ", leaseEndDate=" + leaseEndDate +
                     ", petDetails='" + petDetails + '\'' +
                     ", vehicleDetails='" + vehicleDetails + '\'' +
+                    ", apartment='" + apartment + '\'' +
                     '}';
         }
 

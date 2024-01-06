@@ -1,5 +1,6 @@
 package com.aksrmk.LeaseEase.dto;
 
+import com.aksrmk.LeaseEase.model.Apartment;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
@@ -58,6 +59,9 @@ public class TenantUpdateRequest {
     private String vehicleDetails;
 
     @Nullable
+    private Apartment apartment;
+
+    @Nullable
     public String getUsername() {
         return username;
     }
@@ -108,4 +112,6 @@ public class TenantUpdateRequest {
     public String getPetDetails() { return petDetails;}
     @Nullable
     public String getVehicleDetails() { return vehicleDetails;}
+    @Nullable
+    public Apartment getApartment() { return apartment;}
 }

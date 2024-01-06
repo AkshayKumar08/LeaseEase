@@ -37,7 +37,7 @@ public class OwnerService {
     public void deleteOwner(String ownerId) {
         Optional<Owner> ownerOptional = ownerRepository.findByOwnerId(ownerId);
         Owner owner = ownerOptional.orElseThrow(() -> new IllegalStateException("owner with email Id does not exist"));
-        ownerRepository.deleteById(owner.getId());
+        ownerRepository.deleteById(owner.getOwnerId());
     }
 
     @Transactional

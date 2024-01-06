@@ -1,7 +1,9 @@
 package com.aksrmk.LeaseEase.config;
 
+import com.aksrmk.LeaseEase.model.Apartment;
 import com.aksrmk.LeaseEase.model.Owner;
 import com.aksrmk.LeaseEase.model.Tenant;
+import com.aksrmk.LeaseEase.repository.ApartmentRepository;
 import com.aksrmk.LeaseEase.repository.OwnerRepository;
 import com.aksrmk.LeaseEase.repository.TenantRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -12,9 +14,11 @@ import java.time.LocalDate;
 import java.time.Month;
 
 @Configuration
-public class OwnerConfig {
+public class Config {
     @Bean
-    CommandLineRunner commandLineRunner(OwnerRepository ownerRepository, TenantRepository tenantRepository){
+    CommandLineRunner commandLineRunner(OwnerRepository ownerRepository,
+                                        TenantRepository tenantRepository,
+                                        ApartmentRepository apartmentRepository){
         return args -> {
             Owner johnDoe = new Owner.OwnerBuilder("john doe",
                         "password",
@@ -22,11 +26,18 @@ public class OwnerConfig {
                         LocalDate.of(1970, Month.JANUARY, 1)).build();
             ownerRepository.save(johnDoe);
 
-            Tenant johnDoe1 = new Tenant.TenantBuilder("john doe",
+            Tenant alice = new Tenant.TenantBuilder("alice wonders",
                     "password",
-                    "john.doe@gmail.com",
-                    LocalDate.of(1970, Month.JANUARY, 1)).build();
-            tenantRepository.save(johnDoe1);
+                    "alice.wonders@gmail.com",
+                    LocalDate.of(1980, Month.JANUARY, 1)).build();
+
+            tenantRepository.save(alice);
+            Apartment m848 = new Apartment(
+                    "848 W Mitchell St, Arlington, TX, 76013",
+                    2,
+                    2,
+                    johnDoe);
+            apartmentRepository.save(m848);
         };
     }
 }
